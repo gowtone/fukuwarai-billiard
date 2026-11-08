@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ふくわらいビリヤード</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <main class="game">
+        <h1 class="title">ふくわらいビリヤード</h1>
+        <p class="status"></p>
+
+        <div class="boards">
+            <section class="board" id="board-1">
+                <h2 class="player-name">プレイヤー1</h2>
+                <p class="score"><span class="score-num">0</span> / 600点</p>
+                <p class="locks">固定できる残り：<span class="lock-num">2</span>回</p>
+                <div class="face" id="face-1"></div>
+                <p class="win">WIN!</p>
+            </section>
+
+            <section class="board" id="board-2">
+                <h2 class="player-name">プレイヤー2</h2>
+                <p class="score"><span class="score-num">0</span> / 600点</p>
+                <p class="locks">固定できる残り：<span class="lock-num">2</span>回</p>
+                <div class="face" id="face-2"></div>
+                <p class="win">WIN!</p>
+            </section>
+        </div>
+
+        <p class="howto">
+            光っているパーツを押したまま後ろに引いて、離すと打てます。引くほど強く飛びます。<br>
+            打ち終わったパーツを押すと、その場所に固定できます（1人2回まで・いつでもOK）。固定したパーツはぶつかられても動きません。
+        </p>
+        <div class="buttons">
+            <button class="btn btn-start">シャッフルしてスタート</button>
+            <button class="btn btn-answer">正解を見る</button>
+        </div>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #fdf6ec;
+  font-family: sans-serif;
+  color: #4a3a30;
+}
+
+.game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 32px 16px;
+}
+
+.title {
+  color: #e07b39;
+  font-size: 32px;
+}
+
+.status {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* ===== 2つの台を横に並べる ===== */
+.boards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+}
+
+.board {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 24px 32px;
+  border-radius: 24px;
+  transition: opacity 0.3s, background-color 0.3s;
+}
+
+/* 自分の番ではない台はうすくする */
+.boards.is-playing .board:not(.is-turn) {
+  opacity: 0.45;
+}
+
+.board.is-turn {
+  background-color: #fff3e6;
+}
+
+.player-name {
+  font-size: 20px;
+}
+
+.score {
+  font-size: 16px;
+}
+
+.locks {
+  font-size: 14px;
+}
+
+.lock-num {
+  font-weight: bold;
+  color: #3a7bd5;
+}
+
+.score-num {
+  font-size: 28px;
+  font-weight: bold;
+  color: #e07b39;
+}
+
+/* ===== 顔（ビリヤードの台） ===== */
+.face {
+  position: relative;
+  width: 300px;
+  height: 380px;
+  margin: 10px;
+  background-color: #ffe0bd;
+  border-radius: 50%;
+  box-shadow: 0 0 0 10px #a0663a;  /* 台のふち */
+  touch-action: none;              /* スマホで引っぱるときに画面がスクロールしないように */
+  user-select: none;
+}
+
+/* 正解の位置に出すうすい影 */
+.goal {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+/* ===== パーツ（ボール） ===== */
+.ball {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+/* 「正解を見る」「もとに戻す」のときだけ、なめらかに動かす */
+.face.is-animating .ball {
+  transition: left 0.6s ease, top 0.6s ease;
+}
+
+.ball img {
+  pointer-events: none;
+}
+
+/* 次に打てるパーツ */
+.ball.is-next {
+  outline: 3px dashed #e07b39;
+  outline-offset: 2px;
+  cursor: grab;
+  z-index: 3;
+}
+
+/* 固定できるパーツ（打ち終わっていて、固定の残りがある） */
+.ball.can-lock {
+  cursor: pointer;
+}
+
+/* 固定したパーツ */
+.ball.is-locked {
+  outline: 3px solid #3a7bd5;
+  outline-offset: 2px;
+}
+
+.ball.is-locked::after {
+  content: "🔒";
+  position: absolute;
+  bottom: -10px;
+  left: -10px;
+  font-size: 14px;
+}
+
+.num {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #4a3a30;
+  color: #fff;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* ===== ビリヤードの棒と、飛ぶ向きのガイド ===== */
+.cue {
+  position: absolute;
+  width: 180px;
+  height: 8px;
+  border-radius: 4px;
+  background: linear-gradient(to right, #6b4423 0%, #c8995c 70%, #f4f1ea 93%, #4a90c2 100%);
+  transform-origin: 100% 50%;  /* 棒の先っぽを中心に回す */
+  display: none;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.guide {
+  position: absolute;
+  height: 0;
+  border-top: 2px dashed #e07b39;
+  transform-origin: 0 50%;     /* 線の始まり（ボールの中心）を中心に回す */
+  display: none;
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* ===== WIN ===== */
+.win {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 72px;
+  font-weight: 900;
+  color: #e07b39;
+  text-shadow: 0 0 12px #fff, 0 0 4px #fff;
+  visibility: hidden;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.board.is-winner .win {
+  visibility: visible;
+  animation: pop 0.6s ease-out;
+}
+
+@keyframes pop {
+  0%   { transform: translate(-50%, -50%) scale(0); }
+  70%  { transform: translate(-50%, -50%) scale(1.3); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+.howto {
+  font-size: 14px;
+  line-height: 1.8;
+  text-align: center;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.btn {
+  padding: 12px 32px;
+  font-size: 18px;
+  font-weight: bold;
+  border: 2px solid #e07b39;
+  border-radius: 999px;
+  background-color: #e07b39;
+  color: #fff;
+  cursor: pointer;
+}
+
+.btn-answer {
+  background-color: #fff;
+  color: #e07b39;
+}
